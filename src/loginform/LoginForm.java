@@ -43,6 +43,11 @@ public class LoginForm extends javax.swing.JFrame {
         btnLogin.setText("Login");
 
         btnReset.setText("Reset");
+        btnReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnResetActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Username");
 
@@ -97,6 +102,16 @@ public class LoginForm extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
+        // TODO add your handling code here:
+        ResetInput();
+    }//GEN-LAST:event_btnResetActionPerformed
+
+    private void ResetInput() {
+        txtUsername.setText("");
+        txtPassword.setText("");
+        txtUsername.requestFocus();
+    }
     /**
      * @param args the command line arguments
      */
