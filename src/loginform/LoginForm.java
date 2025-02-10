@@ -2,8 +2,17 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
+
+
 package loginform;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+
+import javax.swing.JOptionPane;
+import loginform.DatabaseConnector;
 /**
  *
  * @author Javanaut
@@ -41,6 +50,11 @@ public class LoginForm extends javax.swing.JFrame {
         jLabel1.setText("Login Form");
 
         btnLogin.setText("Login");
+        btnLogin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnLoginActionPerformed(evt);
+            }
+        });
 
         btnReset.setText("Reset");
         btnReset.addActionListener(new java.awt.event.ActionListener() {
@@ -107,6 +121,39 @@ public class LoginForm extends javax.swing.JFrame {
         ResetInput();
     }//GEN-LAST:event_btnResetActionPerformed
 
+    private void btnLoginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoginActionPerformed
+        // TODO add your handling code here:
+        ProsesLogin();
+    }//GEN-LAST:event_btnLoginActionPerformed
+
+    private void ProsesLogin() {
+        Connection conn = DatabaseConnector.getConnection(); // sambungin database
+        if (conn != null) {
+            try {
+                String sql = "SELECT * FROM tbl_account WHERE username=? AND password=?";
+                PreparedStatement pst = conn.prepareStatement(sql);
+                
+                pst.setString(1, txtUsername.getText());
+                pst.setString(2, new String(txtPassword.getText()));
+                
+                ResultSet rs = pst.executeQuery();
+                if (rs.next()) {
+                    JOptionPane.showMessageDialog(this, "Login Berhasil! Selamat datang " + txtUsername.getText());
+                    this.dispose(); // Menutup login form setelah berhasil login
+                } else {
+                    JOptionPane.showMessageDialog(this, "Username atau password salah!");
+                }
+                
+                rs.close();
+                pst.close();
+                conn.close();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage());
+            }
+        } else {
+            JOptionPane.showMessageDialog(this, "Koneksi database gagal!");
+        }
+    }
     private void ResetInput() {
         txtUsername.setText("");
         txtPassword.setText("");
